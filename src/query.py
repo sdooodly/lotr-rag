@@ -1,12 +1,14 @@
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_openai import ChatOpenAI
 from langchain.chains import RetrievalQA
+import os
 
-DB_PATH = "vectorstore"
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DB_PATH = os.path.join(BASE_DIR, "vectorstore")
 
 embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
+    model_name="BAAI/bge-small-en-v1.5"
 )
 
 db = FAISS.load_local(DB_PATH, embeddings, allow_dangerous_deserialization=True)
@@ -22,5 +24,5 @@ qa = RetrievalQA.from_chain_type(
 
 while True:
     q = input("Question: ")
-    answer = qa.run(q)
-    print(answer)
+    result = qa.invoke(q)
+    print("\nAnswer:\n", result["result"], "\n")
