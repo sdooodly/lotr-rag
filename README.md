@@ -1,6 +1,8 @@
 # LOTR RAG
 
-A Retrieval-Augmented Generation app that lets you ask questions about the Lord of the Rings books.
+A Retrieval-Augmented Generation app that lets you ask questions about the LOTR books. 
+
+Runs fully locally —> no data leaves your machine.
 
 ## Tech Stack
 
@@ -9,9 +11,12 @@ A Retrieval-Augmented Generation app that lets you ask questions about the Lord 
 - LangChain (RAG pipeline)
 - FAISS (vector search)
 - HuggingFace sentence-transformers (embeddings)
-- OpenAI GPT-4o-mini (LLM)
-- Gunicorn (production server)
-- Railway (deployment)
+- Ollama + Llama 3 (local LLM)
+
+## Prerequisites
+
+- [Ollama](https://ollama.com) installed and running
+- Pull the model: `ollama pull llama3`
 
 ## Setup
 
@@ -23,12 +28,6 @@ source .venv/Scripts/activate  # Windows
 pip install -r requirements.txt
 ```
 
-Create a `.env` file in the project root:
-
-```
-OPENAI_API_KEY=your-key-here
-```
-
 ## Usage
 
 ### 1. Ingest PDFs
@@ -37,15 +36,13 @@ OPENAI_API_KEY=your-key-here
 python -m src.ingest
 ```
 
-Reads the LOTR PDFs from `data/pdf/`, chunks them, and saves a FAISS vector store to `vectorstore/`.
-
 ### 2. Run the web app
 
 ```bash
 python -m src.app
 ```
 
-Open `http://localhost:5000` in your browser.
+Open `http://localhost:5000`
 
 ## Project Structure
 
@@ -60,7 +57,3 @@ static/images/ — background image
 data/pdf/      — source PDFs
 vectorstore/   — FAISS index (generated)
 ```
-
-## Deployment
-
-Deployed on Railway. Set `OPENAI_API_KEY` in Railway's environment variables.
