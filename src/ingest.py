@@ -1,34 +1,31 @@
+import config  # noqa: F401
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_huggingface import HuggingFaceEmbeddings
+from rag import get_embeddings
+from config import PDF_DIR, DB_PATH, CHUNK_SIZE, CHUNK_OVERLAP
 import os
 
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-PDF_DIR = os.path.join(BASE_DIR, "data", "pdf")
-DB_PATH = os.path.join(BASE_DIR, "vectorstore")
+def ingest():
+    docs = []
+    for file in os.listdir(PDF_DIR):
+        if file.endswith(".pdf"):
+            loader = PyPDFLoader(os.path.join(PDF_DIR, file))
+            docs.extend(loader.load())
 
-docs = []
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
+    )
+    chunks = splitter.split_documents(docs)
 
-for file in os.listdir(PDF_DIR):
-    if file.endswith(".pdf"):
-        loader = PyPDFLoader(os.path.join(PDF_DIR, file))
-        docs.extend(loader.load())
+    embeddings = get_embeddings()
+    vectorstore = FAISS.from_documents(chunks, embeddings)
+    vectorstore.save_local(DB_PATH)
 
-splitter = RecursiveCharacterTextSplitter(
-    chunk_size=800,
-    chunk_overlap=150
-)
+    print(f"Ingested {len(chunks)} chunks from {len(docs)} pages.")
 
-chunks = splitter.split_documents(docs)
 
-embeddings = HuggingFaceEmbeddings(
-    model_name="sentence-transformers/all-MiniLM-L6-v2"
-)
-
-vectorstore = FAISS.from_documents(chunks, embeddings)
-
-vectorstore.save_local(DB_PATH)
-
-print("Ingestion complete.")
+if __name__ == "__main__":
+    ingest()
