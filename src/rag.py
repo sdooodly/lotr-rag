@@ -4,7 +4,7 @@ from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from config import DB_PATH, EMBEDDING_MODEL, LLM_MODEL, RETRIEVER_K
+from src.config import DB_PATH, EMBEDDING_MODEL, LLM_MODEL, RETRIEVER_K
 
 PROMPT_TEMPLATE = (
     "Answer the question based on the following context:\n\n"

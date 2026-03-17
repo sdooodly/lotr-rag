@@ -1,7 +1,7 @@
-import config  # noqa: F401
+from src import config  # noqa: F401
 from flask import Flask, render_template, request, jsonify
-from rag import build_chain
-from config import TEMPLATE_DIR, STATIC_DIR
+from src.rag import build_chain
+from src.config import TEMPLATE_DIR, STATIC_DIR
 
 chain = build_chain()
 

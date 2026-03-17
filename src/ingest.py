@@ -1,9 +1,9 @@
-import config  # noqa: F401
+from src import config  # noqa: F401
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from rag import get_embeddings
-from config import PDF_DIR, DB_PATH, CHUNK_SIZE, CHUNK_OVERLAP
+from src.rag import get_embeddings
+from src.config import PDF_DIR, DB_PATH, CHUNK_SIZE, CHUNK_OVERLAP
 import os
 
 

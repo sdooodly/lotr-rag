@@ -1,5 +1,5 @@
-import config  # noqa: F401
-from rag import build_chain
+from src import config  # noqa: F401
+from src.rag import build_chain
 
 chain = build_chain()
 
