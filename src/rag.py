@@ -1,10 +1,10 @@
 from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnablePassthrough
-from src.config import DB_PATH, EMBEDDING_MODEL, LLM_MODEL, RETRIEVER_K
+from src.config import DB_PATH, EMBEDDING_MODEL, LLM_MODEL, OLLAMA_BASE_URL, RETRIEVER_K
 
 PROMPT_TEMPLATE = (
     "Answer the question based on the following context:\n\n"
@@ -26,7 +26,7 @@ def build_chain(retriever=None):
         db = load_vectorstore()
         retriever = db.as_retriever(search_kwargs={"k": RETRIEVER_K})
 
-    llm = ChatOpenAI(model=LLM_MODEL)
+    llm = ChatOllama(model=LLM_MODEL, base_url=OLLAMA_BASE_URL)
     prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
 
     def format_docs(docs):

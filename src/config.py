@@ -11,7 +11,8 @@ TEMPLATE_DIR = os.path.join(BASE_DIR, "templates")
 STATIC_DIR = os.path.join(BASE_DIR, "static")
 
 EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
-LLM_MODEL = "gpt-4o-mini"
+LLM_MODEL = "llama3"
+OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 CHUNK_SIZE = 800
 CHUNK_OVERLAP = 150
 RETRIEVER_K = 4
